@@ -1,85 +1,40 @@
-const form = document.getElementById("checkinForm");
-const previewImg = document.getElementById("previewImg");
-const previewText = document.getElementById("previewText");
-const ktpInput = document.getElementById("ktpInput");
-const progressBar = document.getElementById("progressBar");
-const statusLine = document.getElementById("status");
-const modal = document.getElementById("modal");
-const closeModal = document.getElementById("closeModal");
-const modalText = document.getElementById("modalText");
+const API_URL = "https://script.google.com/macros/s/AKfycbwEbUF74-b-UnZBCiYNuaHcxkXM97UVCmAo6a63m9UhDGHwXTdKFFoXg-PjIjZGR630/exec";
 
-// preview file when selected
-ktpInput.addEventListener("change", function () {
-  const file = this.files[0];
-  if (!file) {
-    previewImg.src = "";
-    previewText.style.display = "block";
-    return;
-  }
-  previewText.style.display = "none";
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    previewImg.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// helper: show modal
-function showModal(text) {
-  modalText.innerText = text || "Check-in berhasil!";
-  modal.style.display = "flex";
-}
-
-// close modal
-closeModal.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-// submit with progress
-form.addEventListener("submit", async (e) => {
+document.getElementById("checkinForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  statusLine.style.color = "#ffcc00";
-  statusLine.textContent = "Mengirim data...";
+  const status = document.getElementById("status");
+  status.textContent = "Mengirim data...";
+  
+  const file = document.querySelector("input[name='ktp']").files[0];
+  const base64 = await toBase64(file);
 
-  const data = new FormData(form);
-
-  // Use XMLHttpRequest to track upload progress
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/checkin", true);
-
-  xhr.upload.onprogress = function (evt) {
-    if (evt.lengthComputable) {
-      const percent = Math.round((evt.loaded / evt.total) * 100);
-      progressBar.style.width = percent + "%";
-    }
+  const payload = {
+    nama: e.target.nama.value,
+    booking: e.target.booking.value,
+    hp: e.target.no_hp.value,       // ✅ FIXED
+    email: e.target.email.value,
+    ktpName: file.name,
+    ktpType: file.type,
+    ktpFile: base64.split(",")[1]
   };
 
-  xhr.onload = function () {
-    try {
-      const res = JSON.parse(xhr.responseText);
-      if (xhr.status >= 200 && xhr.status < 300) {
-        statusLine.style.color = "#7ee7bf";
-        statusLine.textContent = "✔ " + (res.message || "Berhasil");
-        progressBar.style.width = "100%";
-        form.reset();
-        previewImg.src = "";
-        previewText.style.display = "block";
-        setTimeout(() => showModal(res.message || "Check-in berhasil!"), 400);
-      } else {
-        statusLine.style.color = "salmon";
-        statusLine.textContent = "✖ " + (res.message || "Terjadi kesalahan");
-      }
-    } catch (err) {
-      statusLine.style.color = "salmon";
-      statusLine.textContent = "✖ Response error";
-    }
-  };
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"   // ✅ WAJIB ADA
+    },
+    body: JSON.stringify(payload)
+  });
 
-  xhr.onerror = function () {
-    statusLine.style.color = "salmon";
-    statusLine.textContent = "✖ Gagal mengirim (network)";
-  };
-
-  xhr.send(data);
+  const data = await res.json();
+  window.location.href = data.whatsappUrl;
 });
+
+function toBase64(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.readAsDataURL(file);
+  });
+}
