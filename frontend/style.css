@@ -1,0 +1,124 @@
+/* Premium UI - Gold/Black glass + moving ribbon + responsive */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root{
+  --gold: #ffcc00;
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,204,0,0.12);
+  --accent: #ffd966;
+  --muted: rgba(255,255,255,0.7);
+  --card-radius: 16px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:"Poppins",sans-serif;background:#0d0d0f;color:#fff}
+
+.bg-wrap{
+  position:fixed;inset:0;z-index:-2;overflow:hidden;
+}
+.bg-layer{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg, rgba(2,6,23,0.65), rgba(10,10,16,0.45)),
+    url("") center/cover no-repeat;
+  filter: none;
+  transform: none;
+  opacity:1;
+  animation: none;
+}
+
+/* subtle moving gold ribbon */
+.gold-ribbon{
+  position:absolute;
+  top:-15%;left:-30%;
+  width:160%;
+  height:50%;
+  background: linear-gradient(90deg, rgba(255,204,0,0.06) 0%, rgba(255,204,0,0.18) 50%, rgba(255,204,0,0.06) 100%);
+  transform: rotate(-12deg);
+  filter: blur(14px);
+  animation: ribbonMove 12s linear infinite;
+  opacity:0.45;
+}
+
+@keyframes slowPan{ from{transform:translateX(0) scale(1.08)} to{transform:translateX(-6%) scale(1.1)} }
+@keyframes ribbonMove{ 0%{transform:rotate(-12deg) translateX(0)} 50%{transform:rotate(-12deg) translateX(6%)} 100%{transform:rotate(-12deg) translateX(0)} }
+
+/* topbar */
+.topbar{position:fixed;top:18px;left:18px;display:flex;align-items:center;gap:10px;z-index:30}
+.logo{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.28);border:1px solid rgba(255,204,0,0.12);box-shadow:0 6px 18px rgba(0,0,0,0.6)}
+.hotel-name{font-weight:600;color:var(--accent);letter-spacing:0.6px}
+.hotel-name span{color:var(--gold)}
+
+/* layout */
+.wrap{min-height:100vh;display:flex;gap:28px;align-items:center;justify-content:center;padding:40px;position:relative;z-index:10}
+
+/* glass card */
+.card, .panel{
+  border-radius:var(--card-radius);
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+  padding:26px;
+  backdrop-filter: blur(8px) saturate(1.1);
+}
+
+/* main form card */
+.card{width:520px;max-width:95%;animation:cardIn .6s cubic-bezier(.2,.9,.2,1)}
+@keyframes cardIn{ from{opacity:0;transform:translateY(8px) scale(.995)} to{opacity:1;transform:none} }
+
+.card-title{font-size:22px;margin:0 0 6px;color:var(--gold);font-weight:700}
+.subtitle{margin:0 0 18px;color:var(--muted);font-size:13px}
+
+/* form */
+form .row{margin-bottom:14px}
+form label{display:block;font-size:13px;color:var(--accent);margin-bottom:6px;font-weight:600}
+input[type="text"], input[type="email"], input[type="file"]{
+  width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.25);color:#fff;font-size:14px;
+}
+input::placeholder{color:rgba(255,255,255,0.45)}
+.two{display:flex;gap:12px}
+.two > div{flex:1}
+
+/* file preview */
+.file-row{display:flex;gap:12px;align-items:center}
+.preview{width:108px;height:78px;border-radius:10px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid rgba(255,255,255,0.04)}
+.preview img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1);transition:transform .25s}
+.preview:hover img{transform:scale(1.05)}
+#previewText{font-size:12px;color:rgba(255,255,255,0.5);padding:6px}
+
+/* progress */
+.progress-wrap{height:8px;background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),#d4a500);width:0%;transition:width .25s}
+
+/* button */
+.btn{display:inline-block;padding:12px 18px;border-radius:12px;border:none;cursor:pointer;font-weight:700}
+.btn.primary{width:100%;background:linear-gradient(90deg,var(--gold),#d4a500);color:#000;box-shadow:0 6px 20px rgba(212,165,0,0.14)}
+.btn.primary:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(212,165,0,0.18)}
+
+/* panel */
+.panel-right{width:260px;max-width:95%;padding:22px}
+.panel h3{margin-top:0;color:var(--gold)}
+.panel ul{padding-left:18px;color:rgba(255,255,255,0.82)}
+.credits{margin-top:14px;font-size:12px;color:rgba(255,255,255,0.5)}
+
+/* modal */
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:60}
+.modal-card{background:#0b0b0b;border:1px solid rgba(255,204,0,0.08);padding:24px;border-radius:16px;width:360px;text-align:center}
+.modal-card h2{color:var(--gold);margin:0 0 8px}
+.modal-card p{color:var(--muted);margin-bottom:18px}
+
+/* status */
+.status-line{font-weight:600;font-size:14px;color:var(--accent);margin:0}
+
+/* responsive */
+@media (max-width:900px){
+  .wrap{flex-direction:column;padding:28px}
+  .panel-right{order:2;width:92%}
+  .card{width:92%}
+}
+
+/* small touches */
+a{color:var(--gold)}
+
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cihampelas | Ultra Premium Check-In</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated background (uses provided image as subtle blur layer) -->
+  <div class="bg-wrap" aria-hidden="true">
+    <div class="bg-layer"></div>
+    <div class="gold-ribbon"></div>
+  </div>
+
+  <header class="topbar">
+    <!-- inline SVG logo -->
+    <div class="logo" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1.5" y="1.5" width="21" height="21" rx="5" stroke="#FFCC00" stroke-width="1.5" fill="rgba(255,205,60,0.06)"/>
+        <path d="M6 15L10 9L14 15" stroke="#FFCC00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="hotel-name">Hotel <span>CIHAMPELAS</span></div>
+  </header>
+
+  <main class="wrap">
+    <section class="card glass">
+      <h1 class="card-title">Quick Check-In</h1>
+      <p class="subtitle">Cepat — Aman — Elegan</p>
+
+      <form id="checkinForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="row">
+          <label>Nama Lengkap</label>
+          <input name="nama" type="text" placeholder="Nama lengkap" required />
+        </div>
+
+        <div class="row two">
+          <div>
+            <label>No. Booking</label>
+            <input name="booking" type="text" placeholder="SL-204802" required />
+          </div>
+          <div>
+            <label>No. HP</label>
+            <input name="no_hp" type="text" placeholder="08xxxx" required />
+          </div>
+        </div>
+
+        <div class="row">
+          <label>Email</label>
+          <input name="email" type="email" placeholder="email@domain.com" required />
+        </div>
+
+        <div class="row file-row">
+          <div class="file-left">
+            <label>Upload Foto KTP</label>
+            <input id="ktpInput" name="ktp" type="file" accept="image/*" required />
+          </div>
+          <div class="preview" id="preview">
+            <img id="previewImg" alt="preview" src="" />
+            <div id="previewText">Preview</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="progress-wrap" aria-hidden="true">
+            <div id="progressBar" class="progress-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <button type="submit" class="btn primary">Submit Check-In</button>
+        </div>
+        <div class="row">
+          <p id="status" class="status-line" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
+    <!-- right side panel card for details / help -->
+    <aside class="panel glass panel-right">
+      <h3>Informasi</h3>
+      <p>Isi data lengkap dan unggah foto KTP yang jelas. Setelah submit, staf akan memproses <strong>cek-in</strong> kamu.</p>
+      <ul>
+        <li>Proses cepat & otomatis</li>
+        <li>File tersimpan aman</li>
+        <li>Server lokal / offline (uji di mesin Anda)</li>
+      </ul>
+      <div class="credits">Powered by hotel cihampelas</div>
+    </aside>
+  </main>
+
+  <!-- success modal -->
+  <div id="modal" class="modal">
+    <div class="modal-card">
+      <h2>Check-In Berhasil</h2>
+      <p id="modalText">Terima kasih — data Anda telah tersimpan.</p>
+      <button id="closeModal" class="btn">Tutup</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
