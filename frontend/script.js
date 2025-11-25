@@ -1,40 +1,31 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwEbUF74-b-UnZBCiYNuaHcxkXM97UVCmAo6a63m9UhDGHwXTdKFFoXg-PjIjZGR630/exec";
-
-document.getElementById("checkinForm").addEventListener("submit", async (e) => {
+document.getElementById("checkinForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const status = document.getElementById("status");
-  status.textContent = "Mengirim data...";
-  
-  const file = document.querySelector("input[name='ktp']").files[0];
-  const base64 = await toBase64(file);
+  let form = document.getElementById("checkinForm");
+  let formData = new FormData(form);
 
-  const payload = {
-    nama: e.target.nama.value,
-    booking: e.target.booking.value,
-    hp: e.target.no_hp.value,       // ✅ FIXED
-    email: e.target.email.value,
-    ktpName: file.name,
-    ktpType: file.type,
-    ktpFile: base64.split(",")[1]
-  };
+  document.getElementById("status").style.color = "#ffcc00";
+  document.getElementById("status").innerText = "Mengirim data...";
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"   // ✅ WAJIB ADA
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const response = await fetch("http://localhost:3000/checkin", {
+      method: "POST",
+      body: formData
+    });
 
-  const data = await res.json();
-  window.location.href = data.whatsappUrl;
+    const result = await response.json();
+
+    if (response.ok) {
+      document.getElementById("status").style.color = "#00ff99";
+      document.getElementById("status").innerText = "✔ " + result.message;
+      form.reset();
+    } else {
+      document.getElementById("status").style.color = "red";
+      document.getElementById("status").innerText = "✖ " + result.message;
+    }
+
+  } catch (err) {
+    document.getElementById("status").style.color = "red";
+    document.getElementById("status").innerText = "Gagal menghubungi server";
+  }
 });
-
-function toBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
-}
